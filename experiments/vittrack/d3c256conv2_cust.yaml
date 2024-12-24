@@ -41,7 +41,7 @@ DATA:
     - 1
     SAMPLE_PER_EPOCH: 10000
 MODEL:
-  PRETRAIN_FILE: "/kaggle/working/workspace_tracking/pretrained_models/mae_pretrain_vit_base.pth"
+  PRETRAIN_FILE: ""
 # PRETRAIN_FILE: "/home/ymz/newdisk2/playground57/checkpoints/train/mtr/v_d3c256/MTR_ep0500.pth.tar"
   EXTRA_MERGER: False
   RETURN_INTER: False

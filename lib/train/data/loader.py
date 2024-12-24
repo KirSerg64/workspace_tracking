@@ -85,6 +85,8 @@ def ltr_collate_stack1(batch):
             # shared memory tensor to avoid an extra copy
             numel = sum([x.numel() for x in batch])
             storage = batch[0].untyped_storage()._new_shared(numel)
+            print(f'Storage shape: {storage.shape}')
+            print(f'Storage shape: {batch.shape}') 
             out = batch[0].new(storage).view(-1, len(batch), *list(batch[0][0].shape))
         return torch.stack(batch, 1, out=out).to("cuda")
         # if batch[0].dim() < 4:

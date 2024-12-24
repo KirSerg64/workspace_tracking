@@ -82,7 +82,8 @@ def run(settings):
     elif settings.script_name == "efficienttrack":
         net = build_efficienttrack(cfg, mode="train")
     elif settings.script_name == "vittrack":
-        pass
+        net =build_vittrack(cfg)
+        net.train(True)
     else:
         raise ValueError("illegal script name")
 

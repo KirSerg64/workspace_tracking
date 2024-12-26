@@ -31,7 +31,7 @@ DATA:
     - LASOT
     DATASETS_RATIO:
     - 1
-    SAMPLE_PER_EPOCH: 60000
+    SAMPLE_PER_EPOCH: 1000
   VAL:
     DATASETS_NAME:
 #    - GOT10K_official_val
@@ -39,7 +39,7 @@ DATA:
 #    - COCO17
     DATASETS_RATIO:
     - 1
-    SAMPLE_PER_EPOCH: 10000
+    SAMPLE_PER_EPOCH: 100
 MODEL:
   PRETRAIN_FILE: ""
 # PRETRAIN_FILE: "/home/ymz/newdisk2/playground57/checkpoints/train/mtr/v_d3c256/MTR_ep0500.pth.tar"

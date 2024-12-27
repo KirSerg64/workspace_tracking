@@ -88,12 +88,10 @@ class LTRTrainer(BaseTrainer):
                 with autocast():
                     loss, stats = self.actor(data)
 
-            # backward pass and update 
-            data.to("cuda:0")
+            # backward pass and update
             if loader.training:
                 self.optimizer.zero_grad()
                 if not self.use_amp:
-                    # print(f"<<<<<<<<<<<<<< {data.device}")
                     loss.backward()
                     if self.settings.grad_clip_norm > 0:
                         torch.nn.utils.clip_grad_norm_(self.actor.net.parameters(), self.settings.grad_clip_norm)

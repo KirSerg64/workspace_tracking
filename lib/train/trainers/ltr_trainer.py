@@ -79,8 +79,8 @@ class LTRTrainer(BaseTrainer):
 
             self.data_to_gpu_time = time.time()
 
-            # data['epoch'] = self.epoch
-            # data['settings'] = self.settings
+            data['epoch'] = self.epoch
+            data['settings'] = self.settings
             # forward pass
             if not self.use_amp:
                 loss, stats = self.actor(data)

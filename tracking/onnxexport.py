@@ -474,10 +474,10 @@ if __name__ == "__main__":
     #     # print("onnxruntime latency: %.2fms" % (lat_ort * 1000))
 
 
-    print("pytorch model average latency", t_pyt/N*1000)
-    print("onnx model average latency:", t_ort/N*1000)
-    print(N / t_pyt, "FPS")
-    print(N / t_ort, "FPS")
+    # print("pytorch model average latency", t_pyt/N*1000)
+    # print("onnx model average latency:", t_ort/N*1000)
+    # print(N / t_pyt, "FPS")
+    # print(N / t_ort, "FPS")
 
     # # compare ONNX Runtime and PyTorch results
     # np.testing.assert_allclose(to_numpy(torch_outs), ort_outs[0], rtol=1e-03, atol=1e-05)

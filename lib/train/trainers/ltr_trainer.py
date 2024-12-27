@@ -79,9 +79,8 @@ class LTRTrainer(BaseTrainer):
 
             self.data_to_gpu_time = time.time()
 
-            data['epoch'] = self.epoch
-            data['settings'] = self.settings
-            data = data.to(self.device)
+            # data['epoch'] = self.epoch
+            # data['settings'] = self.settings
             # forward pass
             if not self.use_amp:
                 loss, stats = self.actor(data)
@@ -91,7 +90,6 @@ class LTRTrainer(BaseTrainer):
 
             # backward pass and update
             # print(f"<<<<<<<<<<<<<<<<<<<< {data.device} {data.to_dict()}")
-
             if loader.training:
                 self.optimizer.zero_grad()
                 if not self.use_amp:

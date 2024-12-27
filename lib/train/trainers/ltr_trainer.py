@@ -89,6 +89,8 @@ class LTRTrainer(BaseTrainer):
                     loss, stats = self.actor(data)
 
             # backward pass and update
+            print("<<<<<<<<<<<<<<<<<<<< {data.device}")
+
             if loader.training:
                 self.optimizer.zero_grad()
                 if not self.use_amp:

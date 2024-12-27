@@ -92,6 +92,7 @@ class LTRTrainer(BaseTrainer):
             if loader.training:
                 self.optimizer.zero_grad()
                 if not self.use_amp:
+                    print(f"<<<<<<<<<<< {data.device}  {self.actor.device}")
                     loss.backward()
                     if self.settings.grad_clip_norm > 0:
                         torch.nn.utils.clip_grad_norm_(self.actor.net.parameters(), self.settings.grad_clip_norm)

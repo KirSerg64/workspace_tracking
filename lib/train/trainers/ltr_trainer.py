@@ -89,7 +89,7 @@ class LTRTrainer(BaseTrainer):
                     loss, stats = self.actor(data)
 
             # backward pass and update
-            print("<<<<<<<<<<<<<<<<<<<< {data.device}")
+            print(f"<<<<<<<<<<<<<<<<<<<< {data.device}")
 
             if loader.training:
                 self.optimizer.zero_grad()

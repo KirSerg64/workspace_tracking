@@ -81,6 +81,7 @@ class LTRTrainer(BaseTrainer):
 
             data['epoch'] = self.epoch
             data['settings'] = self.settings
+            data = data.to(self.device)
             # forward pass
             if not self.use_amp:
                 loss, stats = self.actor(data)
@@ -89,7 +90,7 @@ class LTRTrainer(BaseTrainer):
                     loss, stats = self.actor(data)
 
             # backward pass and update
-            print(f"<<<<<<<<<<<<<<<<<<<< {data.device} {data.to_dict()}")
+            # print(f"<<<<<<<<<<<<<<<<<<<< {data.device} {data.to_dict()}")
 
             if loader.training:
                 self.optimizer.zero_grad()

@@ -23,3 +23,4 @@ test.onnx
 tracking/analysis_results.py
 *.onnx
 *.pth
+models/weights/

@@ -2,15 +2,13 @@ import torch
 import torch.utils.data.dataloader
 import importlib
 import collections
-# from torch._six import string_classes
-string_classes = str
+from torch._six import string_classes
 from lib.utils import TensorDict, TensorList
 
 if float(torch.__version__[:3]) >= 1.9 or len('.'.join((torch.__version__).split('.')[0:2])) > 3:
     int_classes = int
 else:
-    # from torch._six import int_classes
-    int_classes = int
+    from torch._six import int_classes
 
 
 def _check_use_shared_memory():
@@ -85,9 +83,6 @@ def ltr_collate_stack1(batch):
             # shared memory tensor to avoid an extra copy
             numel = sum([x.numel() for x in batch])
             storage = batch[0].storage()._new_shared(numel)
-            # print(f'Storage shape: {storage.shape}')
-            # print(f'Storage shape: {batch.shape}') 
-            # out = batch[0].new(storage).view(-1, len(batch), *list(batch[0][0].shape))
             out = batch[0].new(storage).view(-1, len(batch), *list(batch[0][0].shape))
         return torch.stack(batch, 1, out=out)
         # if batch[0].dim() < 4:

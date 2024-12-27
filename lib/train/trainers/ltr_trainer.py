@@ -74,8 +74,8 @@ class LTRTrainer(BaseTrainer):
         for i, data in enumerate(loader, 1):
             self.data_read_done_time = time.time()
             # get inputs
-            # if self.move_data_to_gpu:
-            data = data.to(self.device)
+            if self.move_data_to_gpu:
+                data = data.to(self.device)
 
             self.data_to_gpu_time = time.time()
 

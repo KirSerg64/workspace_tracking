@@ -398,88 +398,23 @@ if __name__ == "__main__":
                       # dynamic_axes={'input': {0: 'batch_size'},  # variable length axes
                       #               'output': {0: 'batch_size'}}
                       )
-    """########## inference with the pytorch model ##########"""
-    # forward the template
-    N = 1
-    # torch_model = torch_model.cuda()
-    # torch_model.box_head.coord_x = torch_model.box_head.coord_x.cuda()
-    # torch_model.box_head.coord_y = torch_model.box_head.coord_y.cuda()
-
     """########## inference with the onnx model ##########"""
     onnx_model = onnx.load(save_name)
     onnx.checker.check_model(onnx_model)
     print("creating session...")
     ort_session = onnxruntime.InferenceSession(save_name, providers=['CPUExecutionProvider'])
-    # ort_session.set_providers(["TensorrtExecutionProvider"],
-    #                   [{'device_id': '1', 'trt_max_workspace_size': '2147483648', 'trt_fp16_enable': 'True'}])
     print("execuation providers:")
     print(ort_session.get_providers())
     # compute ONNX Runtime output prediction
     """warmup (the first one running latency is quite large for the onnx model)"""
-    for i in range(50):
-        # pytorch inference
-        # img_x_cuda, mask_x_cuda, feat_vec_z_cuda, mask_vec_z_cuda, pos_vec_z_cuda = \
-        #     img_x.cuda(), mask_x.cuda(), feat_vec_z.cuda(), mask_vec_z.cuda(), pos_vec_z.cuda()
-        img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
-        torch_outs = torch_model(img_z, img_x)
-        # onnx inference
-        ort_inputs = {'template': to_numpy(img_z),
+
+    img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
+    torch_outs = torch_model(img_z, img_x)
+    # onnx inference
+    ort_inputs = {'template': to_numpy(img_z),
                       'search': to_numpy(img_x),
                       }
-        s_ort = time.time()
-        ort_outs = ort_session.run(None, ort_inputs)
-    """begin the timing"""
-    t_pyt = 0  # pytorch time
-    t_ort = 0  # onnxruntime time
-
-    # for i in range(N):
-    #     # generate data
-    #     img_x, img_z = get_data(bs=bs, sz_x=sz_x, sz_z=sz_z)
-    #     # pytorch inference
-    #     # img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
-    #     s_pyt = time.time()
-    #     torch_outs = torch_model(img_z, img_x)
-    #     e_pyt = time.time()
-    #     lat_pyt = e_pyt - s_pyt
-    #     t_pyt += lat_pyt
-    #     # print("pytorch latency: %.2fms" % (lat_pyt * 1000))
-    #     # onnx inference
-    #     ort_inputs = {'template': to_numpy(img_z),
-    #                   'search': to_numpy(img_x),
-    #                   }
-    #     s_ort = time.time()
-    #     ort_outs = ort_session.run(None, ort_inputs)
-    #     e_ort = time.time()
-    #     lat_ort = e_ort - s_ort
-    #     t_ort += lat_ort
-
-    # for i in range(N):
-    #     img_x, img_z = get_data(bs=bs, sz_x=sz_x, sz_z=sz_z)
-    #     # pytorch inference
-    #     # img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
-    #     s_pyt = time.time()
-    #     torch_outs = torch_model(img_z, img_x)
-    #     e_pyt = time.time()
-    #     lat_pyt = e_pyt - s_pyt
-    #     t_pyt += lat_pyt
-    # for i in range(N):
-    #     ort_inputs = {'template': to_numpy(img_z),
-    #                       'search': to_numpy(img_x),
-    #                       }
-    #     s_ort = time.time()
-    #     ort_outs = ort_session.run(None, ort_inputs)
-    #     e_ort = time.time()
-    #     lat_ort = e_ort - s_ort
-    #     t_ort += lat_ort
-    #     # print("onnxruntime latency: %.2fms" % (lat_ort * 1000))
+    s_ort = time.time()
+    ort_outs = ort_session.run(None, ort_inputs)
 
 
-    # print("pytorch model average latency", t_pyt/N*1000)
-    # print("onnx model average latency:", t_ort/N*1000)
-    # print(N / t_pyt, "FPS")
-    # print(N / t_ort, "FPS")
-
-    # # compare ONNX Runtime and PyTorch results
-    # np.testing.assert_allclose(to_numpy(torch_outs), ort_outs[0], rtol=1e-03, atol=1e-05)
-    #
-    # print("Exported model has been tested with ONNXRuntime, and the result looks good!")

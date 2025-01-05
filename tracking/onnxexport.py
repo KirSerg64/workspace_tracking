@@ -337,7 +337,7 @@ if __name__ == "__main__":
     # options = onnxruntime.SessionOptions()
     # options.intra_op_num_threads = 1
     load_checkpoint = True
-    save_name = "vttrack.onnx"
+    save_name = "vttrack_2025jan.onnx"
     # update cfg
     args = parse_args()
     yaml_fname = 'experiments/%s/%s.yaml' % (args.script, args.config)
@@ -347,16 +347,18 @@ if __name__ == "__main__":
     # load checkpoint
     if load_checkpoint:
         save_dir = env_settings().save_dir
-        if args.script == 'ostrack':
-            model = build_small_ostrack(cfg, training=False)
-            checkpoint_name = os.path.join(save_dir,
-                                           "checkpoints/train/%s/%s/OSTrack_ep0300.pth.tar"
-                                           % (args.script, args.config))
-        else :
-            model = build_model(cfg)
-            checkpoint_name = os.path.join(save_dir,
-                                           "checkpoints/train/%s/%s/OstrackDist_ep0160.pth.tar"
-                                           % (args.script, args.config))
+        # if args.script == 'ostrack':
+        #     model = build_small_ostrack(cfg, training=False)
+        #     checkpoint_name = os.path.join(save_dir,
+        #                                    "checkpoints/train/%s/%s/OSTrack_ep0300.pth.tar"
+        #                                    % (args.script, args.config))
+        # else :
+        #     model = build_model(cfg)
+        #     checkpoint_name = os.path.join(save_dir,
+        #                                    "checkpoints/train/%s/%s/OstrackDist_ep0160.pth.tar"
+        #                                    % (args.script, args.config))            
+        model = build_model(cfg)
+        checkpoint_name = os.path.join(save_dir, "weights", "OstrackDist_ep0300.pth.tar")    
         a, b = model.load_state_dict(torch.load(checkpoint_name, map_location='cpu')['net'], strict=False)
     # transfer to test mode
     # model = repvgg_model_convert(model)
@@ -391,7 +393,7 @@ if __name__ == "__main__":
                       (img_z, img_x),  # model input (a tuple for multiple inputs)
                       save_name,  # where to save the model (can be a file or file-like object)
                       export_params=True,  # store the trained parameter weights inside the model file
-                      opset_version=14,  # the ONNX version to export the model to
+                      opset_version=17,  # the ONNX version to export the model to
                       do_constant_folding=True,  # whether to execute constant folding for optimization
                       input_names=['template', 'search'],  # model's input names
                       output_names=['output1', 'output2', 'output3'],  # the model's output names
@@ -408,12 +410,15 @@ if __name__ == "__main__":
     # compute ONNX Runtime output prediction
     """warmup (the first one running latency is quite large for the onnx model)"""
 
-    img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
-    torch_outs = torch_model(img_z, img_x)
+    if torch.cuda.is_available():
+        img_x_cuda, img_z_cuda = img_x.cuda(), img_z.cuda()
+        torch_outs = torch_model(img_z_cuda, img_x_cuda)
+    else:
+        torch_outs = torch_model(img_z, img_x)
     # onnx inference
     ort_inputs = {'template': to_numpy(img_z),
-                      'search': to_numpy(img_x),
-                      }
+                'search': to_numpy(img_x),
+                }
     s_ort = time.time()
     ort_outs = ort_session.run(None, ort_inputs)
 

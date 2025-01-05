@@ -43,7 +43,7 @@ DATA:
     SAMPLE_PER_EPOCH: 1000
 MODEL:
 #  PRETRAIN_FILE: "mae_pretrain_vit_base.pth"
-  PRETRAIN_FILE: "/kaggle/working/ostrackpretrained/vit_48_h32_noKD_cust_pretrained.pt"
+  PRETRAIN_FILE: "/kaggle/input/ostrackdist_ep0300/pytorch/default/1/OstrackDist_ep0300.pth.tar"
   EXTRA_MERGER: False
   RETURN_INTER: False
   BACKBONE:

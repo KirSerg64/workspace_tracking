@@ -182,9 +182,11 @@ def build_ostrack_dist(cfg, depth=3, mode='eval'):
             a, b = model.load_state_dict(ckpt, strict=False)
         elif cfg.MODEL.PRETRAIN_FILE.endswith('tar'):
             ckpt = torch.load(cfg.MODEL.PRETRAIN_FILE)['net']#pth用model,tar用net
-            pe = ckpt['pos_embed'][:, 1:, :]
-            pe_t = pe[:, 0:256, :]
-            pe_s = pe[:, 256:, :]
+            # pe = ckpt['pos_embed'][:, 1:, :]
+            # pe_t = pe[:, 0:256, :]
+            # pe_s = pe[:, 256:, :]
+            pe_t = ckpt["pos_embed_z"]
+            pe_s = ckpt["pos_embed_x"]
             b_pe, hw_pe, c_pe = pe_t.shape
             side_pe = int(math.sqrt(hw_pe))
             pe_2D = pe_t.reshape([b_pe, side_pe, side_pe, c_pe]).permute([0, 3, 1, 2])  # b,c,h,w

@@ -185,17 +185,17 @@ def build_ostrack_dist(cfg, depth=3, mode='eval'):
             # pe = ckpt['pos_embed'][:, 1:, :]
             # pe_t = pe[:, 0:256, :]
             # pe_s = pe[:, 256:, :]
-            pe_t = ckpt["pos_embed_z"]
-            pe_s = ckpt["pos_embed_x"]
-            b_pe, hw_pe, c_pe = pe_t.shape
-            side_pe = int(math.sqrt(hw_pe))
-            pe_2D = pe_t.reshape([b_pe, side_pe, side_pe, c_pe]).permute([0, 3, 1, 2])  # b,c,h,w
-            side_num_patches_template = 8
-            pe_t_2D = nn.functional.interpolate(pe_2D, [side_num_patches_template, side_num_patches_template],
-                                                align_corners=True, mode='bicubic')
-            pe_t = torch.flatten(pe_t_2D.permute([0, 2, 3, 1]), 1, 2)
-            ckpt['pos_embed_z'] = pe_t
-            ckpt['pos_embed_x'] = pe_s
+            # pe_t = ckpt["pos_embed_z"]
+            # pe_s = ckpt["pos_embed_x"]
+            # b_pe, hw_pe, c_pe = pe_t.shape
+            # side_pe = int(math.sqrt(hw_pe))
+            # pe_2D = pe_t.reshape([b_pe, side_pe, side_pe, c_pe]).permute([0, 3, 1, 2])  # b,c,h,w
+            # side_num_patches_template = 8
+            # pe_t_2D = nn.functional.interpolate(pe_2D, [side_num_patches_template, side_num_patches_template],
+            #                                     align_corners=True, mode='bicubic')
+            # pe_t = torch.flatten(pe_t_2D.permute([0, 2, 3, 1]), 1, 2)
+            # ckpt['pos_embed_z'] = pe_t
+            # ckpt['pos_embed_x'] = pe_s
             a, b = model.load_state_dict(ckpt, strict=False)
     return model
 

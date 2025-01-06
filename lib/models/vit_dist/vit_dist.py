@@ -197,6 +197,7 @@ def build_ostrack_dist(cfg, depth=3, mode='eval'):
             # ckpt['pos_embed_z'] = pe_t
             # ckpt['pos_embed_x'] = pe_s
             a, b = model.load_state_dict(ckpt, strict=False)
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VitDist<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     return model
 
 if __name__ == "__main__":

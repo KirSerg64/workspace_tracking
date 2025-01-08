@@ -62,17 +62,18 @@ class LaSOTlmdbDataset(BaseDataset):
         return len(self.sequence_list)
 
     def _get_sequence_list(self):
-        # sequence_list = ['mouse-1',
-        #                  'mouse-8',
-        #                  'mouse-9',
-        #                  'mouse-17',
-        #                  'electricfan-1',
-        #                  'electricfan-10',
-        #                  'electricfan-18',
-        #                  'electricfan-20',
-        #                  'gecko-1',
-        #                  'gecko-5',
-        #                  'gecko-16',
-        #                  'gecko-19',]
-        sequence_list = ['dualsense-1',]        
+        sequence_list = ['mouse-1',
+                         'mouse-8',
+                         'mouse-9',
+                         'mouse-17',
+                         'electricfan-1',
+                         'electricfan-10',
+                         'electricfan-18',
+                         'electricfan-20',
+                         'gecko-1',
+                         'gecko-5',
+                         'gecko-16',
+                         'gecko-19',
+                         'dualsense-1',
+                        ]
         return sequence_list

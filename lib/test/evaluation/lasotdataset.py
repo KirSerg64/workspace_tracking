@@ -71,6 +71,11 @@ class LaSOTDataset(BaseDataset):
                          'gecko-5',
                          'gecko-16',
                          'gecko-19',
-                         'dualsense-1',
+                         'dualsense-2',
+                         'dualsense-10',
+                         'dualsense-23',
+                         'dualsense-32',
+                         'dualsense-43',
+                         'dualsense-55'
                         ]        
         return sequence_list

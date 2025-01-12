@@ -156,6 +156,13 @@ class OstrackDist(nn.Module):
 
 import math
 
+def freeze_layers(model):
+    for param in model.parameters():
+        param.requires_grad = False
+    for param in model.box_head.parameters():
+        param.requires_grad = True    
+
+
 def build_ostrack_dist(cfg, depth=3, mode='eval'):
     embed_dim = cfg.MODEL.BACKBONE.CHANNELS
     num_heads=cfg.MODEL.BACKBONE.HEADS
@@ -197,7 +204,8 @@ def build_ostrack_dist(cfg, depth=3, mode='eval'):
             # ckpt['pos_embed_z'] = pe_t
             # ckpt['pos_embed_x'] = pe_s
             a, b = model.load_state_dict(ckpt, strict=False)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VitDist<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VitDist<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    freeze_layers(model)
     return model
 
 if __name__ == "__main__":
@@ -210,19 +218,22 @@ if __name__ == "__main__":
     cfg = config_module.cfg
     config_module.update_config_from_file(args.config)
     model = build_ostrack_dist(cfg, mode='training')
-    template = torch.randn((1, 3, 128, 128))
-    search = torch.randn((1, 3, 256, 256))
-    torch.onnx.export(model,  # model being run
-                      (template, search),  # model input (a tuple for multiple inputs)
-                      'vit_dist.onnx',  # where to save the model (can be a file or file-like object)
-                      export_params=True,  # store the trained parameter weights inside the model file
-                      opset_version=11,  # the ONNX version to export the model to
-                      do_constant_folding=True,  # whether to execute constant folding for optimization
-                      input_names=['template', 'search'],  # model's input names
-                      output_names=['outputs_coord'],  # the model's output names
-                      # dynamic_axes={'input': {0: 'batch_size'},  # variable length axes
-                      #               'output': {0: 'batch_size'}}
-                      )
-    res = model(template, search)
+    for n, p in model.named_parameters():
+        if p.requires_grad:
+            print(n)
+    # template = torch.randn((1, 3, 128, 128))
+    # search = torch.randn((1, 3, 256, 256))
+    # torch.onnx.export(model,  # model being run
+    #                   (template, search),  # model input (a tuple for multiple inputs)
+    #                   'vit_dist.onnx',  # where to save the model (can be a file or file-like object)
+    #                   export_params=True,  # store the trained parameter weights inside the model file
+    #                   opset_version=11,  # the ONNX version to export the model to
+    #                   do_constant_folding=True,  # whether to execute constant folding for optimization
+    #                   input_names=['template', 'search'],  # model's input names
+    #                   output_names=['outputs_coord'],  # the model's output names
+    #                   # dynamic_axes={'input': {0: 'batch_size'},  # variable length axes
+    #                   #               'output': {0: 'batch_size'}}
+    #                   )
+    # res = model(template, search)
     # print(res)
 
